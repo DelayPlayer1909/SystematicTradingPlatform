@@ -64,7 +64,7 @@ Designed as a rapid-prototype for **Quant Developer** evaluations, this system s
 - ✅ **Chart.js Integration**: High-performance canvas rendering for smooth lines.
 - ✅ **Dynamic Toggling**: Instantly switch chart views between Price, Z-Score, and Spread.
 - ✅ **Smart Alerts**: Client-side price threshold alerts with visual banners.
-- ✅ **CSV Export**: One-click download of full session datasets.
+- ✅ **CSV Export**: One-click download of full session datasets (CSV/JSON).
 
 ---
 
@@ -90,37 +90,35 @@ Designed as a rapid-prototype for **Quant Developer** evaluations, this system s
 
 ## 🏗️ Architecture
 
-
-
+```text
 ┌───────────────────────────────┐
-│        Market Engine          │
+│         Market Engine         │
 │     (Tick Data Generator)     │
 └───────────────┬───────────────┘
                 │
                 ▼
 ┌────────────────────────────────────────┐
-│           Backend (Node.js)             │
+│           Backend (Node.js)            │
 │                                        │
-│  - History Buffer (In-Memory)           │
-│  - Quant Analytics (Z-Score, Spread)    │
-│  - Socket.IO Broadcaster                │
+│  - History Buffer (In-Memory)          │
+│  - Quant Analytics (Z-Score, Spread)   │
+│  - Socket.IO Broadcaster               │
 │                                        │
-│  Events:                                │
-│  • market-update (live)                 │
-│  • market-history (on connect)          │
+│  Events:                               │
+│  • market-update (live)                │
+│  • market-history (on connect)         │
 └───────────────┬────────────────────────┘
                 │ WebSocket
                 ▼
 ┌────────────────────────────────────────┐
-│          Frontend (Browser)             │
+│           Frontend (Browser)           │
 │                                        │
-│  - Interactive Dashboard                │
-│  - Live Charts (Chart.js)               │
-│  - Alert System                         │
-│  - CSV Data Export                      │
+│  - Interactive Dashboard               │
+│  - Live Charts (Chart.js)              │
+│  - Alert System                        │
+│  - CSV Data Export                     │
 └────────────────────────────────────────┘
-
-
+```
 
 ### Data Flow
 
@@ -149,43 +147,49 @@ Open your terminal in the project folder and run:
 ```bash
 npm init -y
 npm install express socket.io ejs
+```
 
+### Step 3: Run the Server
 
-Step 3: Run the Server
-    node server.js
-You should see: 🚀 Server running at http://localhost:3000
+```bash
+node server.js
+```
 
-🚀 Usage
-1. Open Dashboard
-Navigate to http://localhost:3000 in your web browser.
+You should see:
+`🚀 Server running at http://localhost:3000`
 
-2. Live Monitoring
-Watch the Live Feed on the left for raw tick data.
+---
 
-The Market Overview chart shows real-time price action for BTC/USD by default.
+## 🚀 Usage
 
-3. Analytics & Charts
-Click the Charts tab to access the interactive multi-view chart.
+### 1. Open Dashboard
+Navigate to `http://localhost:3000` in your web browser.
 
-Use the toggle buttons (Price / Z-Score / Spread) to switch analysis modes.
+### 2. Live Monitoring
+- Watch the **Live Feed** on the left for raw tick data.
+- The **Market Overview** chart shows real-time price action for BTC/USD by default.
 
-Click Analytics for a split-view deep dive.
+### 3. Analytics & Charts
+- Click the **Analytics** tab to access the interactive multi-view chart.
+- Use the toggle buttons (Price / Z-Score / Spread) to switch analysis modes.
+- Below that, view the split-view deep dive charts.
 
-4. Alerting
-Go to the Dashboard tab.
+### 4. Alerting
+- Go to the **Dashboard** tab.
+- In the **Alert Config** box (bottom-left), enter a price (e.g., `42050`).
+- Click **Set**. If the simulated price crosses this value, a red banner will appear.
 
-In the Alert Config box (bottom-left), enter a price (e.g., 42050).
+### 5. Export Data
+- Navigate to the **Controls** tab.
+- Select your target asset (BTC, ETH, SOL) and file format (CSV, JSON).
+- Check the record count in the **Data Export** card.
+- Click **Download File** to get the full session history.
 
-Click Set. If the simulated price crosses this value, a red banner will appear.
+---
 
-5. Export Data
-Navigate to the Controls tab.
+## 📁 Project Structure
 
-Check the record count in the Data Export card.
-
-Click Download CSV to get the full session history.
-
-📁 Project Structure
+```text
 SystematicTradingPlatform/
 ├── public/                 # Static Assets
 │   ├── css/
@@ -199,32 +203,40 @@ SystematicTradingPlatform/
 ├── server.js               # Main Backend Entry Point
 ├── package.json            # Dependencies
 └── README.md               # Documentation
+```
 
+---
 
-⚙️ Configuration
+## ⚙️ Configuration
 
-Simulation Speed
-Edit server.js:
-
+### Simulation Speed
+Edit `server.js`:
+```javascript
 // Change 200 to desired milliseconds (lower = faster)
 setInterval(() => { ... }, 200);
+```
 
-
-Volatility Settings
-Edit server.js:
-
+### Volatility Settings
+Edit `server.js`:
+```javascript
 const symbols = [
     { code: 'BTC/USD', price: 42000, volatility: 35 }, // Increase for wilder moves
     ...
 ];
+```
 
+---
 
+## 👨‍💻 Author
 
-👨‍💻 Author
-CollabCode Developer Built for the Modern Quant.
+**DelayPlayer1909**  
+
+- **GitHub:** [@DelayPlayer1909](https://github.com/DelayPlayer1909)
+- **Repository:** [SystematicTradingPlatform](https://github.com/DelayPlayer1909/SystematicTradingPlatform)
+
 
 <div align="center">
 
-Built with ❤️ for Quantitative Traders
+**Built with ❤️ for Quantitative Traders**
 
 </div>
