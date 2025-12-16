@@ -1,0 +1,109 @@
+/* public/css/style.css */
+:root {
+    --bg-main: #09090b;
+    --bg-card: #0f1115;
+    --border: #27272a;
+    --text-main: #e4e4e7;
+    --text-muted: #a1a1aa;
+    --accent: #3b82f6;
+    --green: #22c55e;
+    --red: #ef4444;
+}
+
+body { background-color: var(--bg-main); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; }
+
+/* Header & Nav */
+.header { background: var(--bg-card); padding: 15px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.brand h1 { margin: 0; font-size: 1.2rem; font-weight: 700; letter-spacing: -0.5px; }
+
+/* --- NEW ATTRACTIVE SELECT --- */
+.select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #18181b;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0 10px;
+    width: 160px;
+    transition: border-color 0.2s;
+}
+.select-wrapper:hover { border-color: var(--accent); }
+.select-wrapper i { color: var(--text-muted); font-size: 0.9rem; }
+.select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    color: white;
+    font-weight: 600;
+    width: 100%;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+}
+.select-wrapper select option { background: #18181b; color: white; padding: 10px; }
+.select-wrapper .arrow { position: absolute; right: 10px; pointer-events: none; }
+
+/* Tabs */
+.tabs-container { padding: 0 25px; border-bottom: 1px solid var(--border); background: var(--bg-card); }
+.tabs { display: flex; gap: 20px; }
+.tab { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 12px 5px; font-weight: 500; font-size: 0.9rem; transition: all 0.2s; border-bottom: 2px solid transparent; }
+.tab:hover { color: var(--text-main); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; padding: 25px; flex: 1; overflow-y: auto; }
+.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Grid & Cards */
+.grid { display: grid; grid-template-columns: 280px 1fr 300px; gap: 20px; height: 100%; }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+.chart-card { flex: 2; }
+.card-header { padding: 12px 15px; background: rgba(255,255,255,0.02); font-size: 0.75rem; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border); letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+.card-body { padding: 15px; flex: 1; overflow-y: auto; position: relative; }
+.relative { position: relative; min-height: 0; }
+
+/* Ticker */
+.ticker-list { list-style: none; padding: 0; margin: 0; }
+.ticker-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+.ticker-item span:first-child { font-weight: 600; color: var(--text-muted); }
+.up { color: var(--green); } .down { color: var(--red); }
+
+/* History Table */
+.history-table { width: 100%; font-size: 0.8rem; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; }
+.history-table td { padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); }
+
+/* Settings & Export */
+.setting-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); }
+.setting-item:last-child { border-bottom: none; }
+.setting-info h4 { margin: 0 0 4px 0; font-size: 0.9rem; font-weight: 500; }
+.setting-info p { margin: 0; font-size: 0.8rem; color: var(--text-muted); }
+
+.switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #3f3f46; transition: .4s; border-radius: 24px; }
+.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--accent); }
+input:checked + .slider:before { transform: translateX(20px); }
+
+.input-dark { background: #18181b; border: 1px solid var(--border); color: white; padding: 8px 12px; border-radius: 6px; width: 100%; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+.input-dark:focus { border-color: var(--accent); }
+.input-group { display: flex; gap: 10px; }
+
+.export-hero { background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(9, 9, 11, 0) 100%); border: 1px solid var(--accent); border-radius: 8px; padding: 30px; text-align: center; margin-bottom: 25px; }
+.file-icon { font-size: 3rem; color: var(--accent); margin-bottom: 15px; display: block; }
+.meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+.meta-box { background: #18181b; padding: 15px; border-radius: 6px; border: 1px solid var(--border); text-align: center; }
+.meta-box small { display: block; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 5px; }
+.meta-box strong { display: block; font-size: 1.1rem; font-family: monospace; }
+
+.btn { padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 0.9rem; transition: opacity 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary { background: var(--accent); color: white; width: 100%; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+.btn:hover { opacity: 0.9; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-main); }
+::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }

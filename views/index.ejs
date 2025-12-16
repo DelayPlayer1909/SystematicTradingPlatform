@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Systematic Trading Platform</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header">
+        <div class="brand">
+            <i class="ri-bar-chart-grouped-fill" style="color:#3b82f6; font-size: 1.4rem;"></i>
+            <h1>Systematic <span style="font-weight:400; color:#555;">Pro</span></h1>
+        </div>
+        
+        <div class="input-group">
+            <div class="select-wrapper">
+                <i class="ri-search-line"></i>
+                <select id="symbolSelect" onchange="changeSymbol()">
+                    <option value="BTC/USD">BTC/USD</option>
+                    <option value="ETH/USD">ETH/USD</option>
+                    <option value="SOL/USD">SOL/USD</option>
+                </select>
+                <i class="ri-arrow-down-s-line arrow"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('dashboard')"><i class="ri-dashboard-line"></i> Dashboard</button>
+            <button class="tab" onclick="openTab('analytics')"><i class="ri-line-chart-line"></i> Analytics</button>
+            <button class="tab" onclick="openTab('controls')"><i class="ri-equalizer-line"></i> Controls</button>
+        </div>
+    </div>
+
+    <main id="dashboard" class="tab-content active">
+        
+        <div id="alertBanner" style="display:none; background:rgba(239, 68, 68, 0.15); color:#ef4444; padding:12px; border-radius:6px; margin-bottom:20px; font-weight:bold; border:1px solid rgba(239, 68, 68, 0.3); align-items:center; gap:10px;">
+            <i class="ri-alarm-warning-fill"></i> <span id="alertMessage">PRICE ALERT TRIGGERED!</span>
+        </div>
+
+        <div class="grid">
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="card" style="flex: 1;">
+                    <div class="card-header"><span>LIVE FEED</span><i class="ri-broadcast-line"></i></div>
+                    <div class="card-body"><ul id="tickerList" class="ticker-list"><li>Initializing...</li></ul></div>
+                </div>
+                <div class="card" style="height: auto; border-color: #3f3f46;">
+                    <div class="card-header"><span>ALERT CONFIG</span><i class="ri-notification-3-line"></i></div>
+                    <div class="card-body">
+                        <div style="margin-bottom: 10px;">
+                            <label style="font-size:0.75rem; color:#888;">Notify if Price ></label>
+                            <div class="input-group" style="margin-top:5px;">
+                                <input type="number" id="alertInput" class="input-dark" placeholder="0.00">
+                                <button onclick="setAlert()" class="btn btn-primary" style="padding: 0 15px;">Set</button>
+                            </div>
+                        </div>
+                        <div id="alertStatus" style="font-size: 0.75rem; color: #666; display:flex; align-items:center; gap:5px;"><i class="ri-information-line"></i> Inactive</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card chart-card">
+                <div class="card-header">
+                    <span>MARKET OVERVIEW</span>
+                    <div style="display: flex; gap: 15px; align-items:center;">
+                        <span id="priceDisplay" style="font-family: monospace; font-weight: bold; color: #fff; font-size: 1rem;">---</span>
+                        <span id="changeDisplay" style="font-family: monospace; font-size: 0.8rem;">---</span>
+                    </div>
+                </div>
+                <div class="card-body relative">
+                    <canvas id="dashboardChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><span>TRADE HISTORY</span><i class="ri-history-line"></i></div>
+                <div class="card-body"><table class="history-table"><tbody id="historyBody"></tbody></table></div>
+            </div>
+        </div>
+    </main>
+
+    <main id="analytics" class="tab-content">
+        <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
+            <div class="card" style="flex: 2; min-height: 300px;">
+                <div class="card-header">
+                    <span id="chartTitle">DETAILED ANALYSIS</span>
+                    <div class="toggle-group" style="display: flex; gap: 5px;">
+                        <button class="toggle-btn active" onclick="toggleMainChart('price', this)">Price</button>
+                        <button class="toggle-btn" onclick="toggleMainChart('zscore', this)">Z-Score</button>
+                        <button class="toggle-btn" onclick="toggleMainChart('spread', this)">Spread</button>
+                    </div>
+                </div>
+                <div class="card-body relative">
+                    <canvas id="interactiveChart"></canvas>
+                </div>
+            </div>
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 20px; flex: 1;">
+                <div class="card">
+                    <div class="card-header" style="display:flex; justify-content:space-between;">
+                        <span>Z-SCORE DEVIATION</span>
+                        <span id="zScoreDisplay" style="color:#eab308; font-family:monospace;">---</span>
+                    </div>
+                    <div class="card-body relative"><canvas id="zScoreChart"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-header" style="display:flex; justify-content:space-between;">
+                        <span>PAIR SPREAD</span>
+                        <span id="spreadDisplay" style="color:#a855f7; font-family:monospace;">---</span>
+                    </div>
+                    <div class="card-body relative"><canvas id="spreadChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="controls" class="tab-content">
+        <div style="max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            
+            <div class="card">
+                <div class="card-header">SYSTEM SETTINGS</div>
+                <div class="card-body">
+                    <div class="setting-item"><div class="setting-info"><h4>Animations</h4></div><label class="switch"><input type="checkbox" id="animToggle"><span class="slider"></span></label></div>
+                    <div class="setting-item"><div class="setting-info"><h4>Grid Lines</h4></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                    <div style="margin-top: 20px;"><label style="font-size:0.8rem; color:#888;">WebSocket</label><input type="text" class="input-dark" value="wss://localhost:3000/stream" readonly style="margin-top:5px;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">DATA EXPORT</div>
+                <div class="card-body">
+                    <div class="export-hero" style="padding: 20px;">
+                        <i class="ri-file-download-fill file-icon" style="font-size: 2rem;"></i>
+                        <h3 style="margin: 5px 0;">Export Data</h3>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size:0.8rem; color:#888; display:block; margin-bottom:5px;">Target Asset</label>
+                            <div class="select-wrapper" style="width:100%">
+                                <select id="exportSymbolSelect" onchange="updateExportStats()">
+                                    <option value="BTC/USD">BTC/USD</option>
+                                    <option value="ETH/USD">ETH/USD</option>
+                                    <option value="SOL/USD">SOL/USD</option>
+                                </select>
+                                <i class="ri-arrow-down-s-line arrow"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="font-size:0.8rem; color:#888; display:block; margin-bottom:5px;">File Format</label>
+                            <div class="select-wrapper" style="width:100%">
+                                <select id="exportFormatSelect">
+                                    <option value="csv">CSV (.csv)</option>
+                                    <option value="json">JSON (.json)</option>
+                                </select>
+                                <i class="ri-arrow-down-s-line arrow"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="meta-grid" style="margin-bottom: 15px;">
+                        <div class="meta-box" style="grid-column: span 2;">
+                            <small>Available Records</small>
+                            <strong id="exportCountLabel" style="color:#3b82f6;">0</strong>
+                        </div>
+                    </div>
+
+                    <button onclick="downloadData()" class="btn btn-primary" style="width:100%">
+                        <i class="ri-download-2-fill"></i> Download File
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            // Trigger stats update if opening controls
+            if(tabName === 'controls') updateExportStats();
+        }
+    </script>
+</body>
+</html>
